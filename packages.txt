@@ -1,0 +1,17 @@
+﻿alsa-utils
+bc
+calamaris
+calamares-settings-debian
+chromium
+console-setup
+dmz-cursor-theme
+jwm
+lxterminal
+firmware-linux-free
+rsync
+slim
+squashfs-tools
+sysstat
+xorg
+xterm
+

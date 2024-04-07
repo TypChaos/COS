@@ -1,0 +1,77 @@
+#!/bin/bash
+
+
+# Step 1
+
+mkdir -p d11 && cd d11
+
+
+# Step 2
+
+lb config --distribution sid
+
+
+# Step 3
+
+lb config -a amd64
+
+lb config --parent-archive-areas "main contrib non-free non-free-firmware"
+
+lb config --firmware-chroot false
+
+lb config --memtest none
+
+lb config --bootappend-live "boot=live components persistence user=comet"
+
+lb config --debian-installer none
+
+
+# Step 4
+
+echo '! Packages Priority standard' > config/package-lists/standard.list.chroot
+
+
+# Step 5
+
+for i in $(cat packages.txt);
+
+do
+
+    echo $i >> config/package-lists/desktop.list.chroot
+
+done
+
+
+# Step 6
+
+lb config --initramfs live-boot
+
+
+# Step 7
+
+echo 'xorg xfce4 xfce4-goodies calamares calamares-settings-debian' >> config/package-lists/desktop.list.chroot
+
+
+# Step 8
+
+cat > config/hooks/xfce.hook << EOF
+
+#!/bin/bash
+
+
+. /usr/share/live/build/functions
+
+
+live_chroot --do-bootappend "echo 'exec startxfce4' > /home/comet/.xinitrc"
+
+EOF
+
+
+chmod +x config/hooks/xfce.hook
+
+
+
+# Step 9
+
+sudo lb build
+
